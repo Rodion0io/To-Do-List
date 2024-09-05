@@ -29,6 +29,12 @@ document.getElementById("add").addEventListener("click", () => {
         const inputFild = document.createElement("input");
         inputFild.setAttribute("type", "checkbox");
         inputFild.classList.add("select");
+        if (eventObject.isSelected){
+            inputFild.checked = true;
+        }
+        else{
+            inputFild.checked = false;
+        }
         inputFild.addEventListener("click", change);
 
 
@@ -90,6 +96,12 @@ window.addEventListener("load", function(){
             const inputFild = document.createElement("input");
             inputFild.setAttribute("type", "checkbox");
             inputFild.classList.add("select");
+            if (cloudFile[i].isSelected){
+                inputFild.checked = true;
+            }
+            else{
+                inputFild.checked = false;
+            }
             inputFild.addEventListener("click", change);
 
 
