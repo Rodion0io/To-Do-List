@@ -2,7 +2,7 @@ import file from "../data.json" with { type: "json" };
 import { redact } from "./redact.js";
 import { change } from "./change.js";
 import { del } from "./delete.js";
-import { saveData } from "./saveData.js";
+import { downloadData } from "./saveData.js";
 
 // Обработчик добавления дела
 document.getElementById("add").addEventListener("click", () => {
@@ -67,7 +67,7 @@ document.getElementById("add").addEventListener("click", () => {
     
 })
 
-document.getElementById("update").addEventListener("click", saveData)
+document.getElementById("update").addEventListener("click", downloadData)
 document.getElementById("clear").addEventListener("click", function() {
     if (file.length !== 0){
         for (let i = 0; i < file.length; i++){
