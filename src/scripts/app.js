@@ -83,56 +83,81 @@ document.getElementById("clear").addEventListener("click", function() {
 })
 
 
-window.addEventListener("load", function(){
-    const cloudFile = JSON.parse(localStorage.getItem("data"));
-    for (let i = 0; i < cloudFile.length; i++){
-        file.push(cloudFile[i]);
-        const listCards = document.querySelector(".cards");
+document.getElementById("chooseFile").addEventListener("change", function(event) {
+    const loadFile = event.target.files[0];
 
-        const card = document.createElement("div");
-        card.setAttribute("id", cloudFile[i].id);
-        
-        card.classList.add("card");
-            const inputFild = document.createElement("input");
-            inputFild.setAttribute("type", "checkbox");
-            inputFild.classList.add("select");
-            if (cloudFile[i].isSelected){
-                inputFild.checked = true;
+    if (loadFile) {
+        const reader = new FileReader();
+
+
+        if (file.length !== 0){
+            for (let i = 0; i < file.length; i++){
+                document.querySelector(".cards").innerHTML = "";
             }
-            else{
-                inputFild.checked = false;
+        }
+        reader.onload = function(e) {
+            try {
+
+
+                const cloudFile = JSON.parse(e.target.result);
+
+                file.length = 0; 
+                file.push(...cloudFile);
+
+                const listCards = document.querySelector(".cards");
+                listCards.innerHTML = "";
+
+                for (let i = 0; i < cloudFile.length; i++) {
+                    const card = document.createElement("div");
+                    card.setAttribute("id", cloudFile[i].id);
+                    card.classList.add("card");
+
+                    const inputFild = document.createElement("input");
+                    inputFild.setAttribute("type", "checkbox");
+                    inputFild.classList.add("select");
+
+                    inputFild.checked = !!cloudFile[i].isSelected;
+
+                    inputFild.addEventListener("click", change);
+
+                    const textBlock = document.createElement("div");
+                    textBlock.classList.add("text");
+
+                    const workList = document.createElement("p");
+                    workList.classList.add("event");
+                    workList.innerHTML = cloudFile[i].event;
+
+                    const redactIcon = document.createElement("img");
+                    redactIcon.classList.add("redact");
+                    redactIcon.setAttribute("src", "/src/img/icons8-редактировать.svg");
+                    redactIcon.addEventListener("click", redact);
+
+                    textBlock.appendChild(workList);
+                    textBlock.appendChild(redactIcon);
+
+                    const deleteIcon = document.createElement("img");
+                    deleteIcon.classList.add("icon");
+                    deleteIcon.setAttribute("src", "/src/img/BlackCross.svg");
+                    deleteIcon.addEventListener("click", del);
+
+                    card.appendChild(inputFild);
+                    card.appendChild(textBlock);
+                    card.appendChild(deleteIcon);
+
+                    listCards.appendChild(card);
+                }
+
+                console.log(file);
+            } catch (error) {
+                console.error("Ошибка при чтении или парсинге файла:", error);
             }
-            inputFild.addEventListener("click", change);
+        };
 
-
-            const textBlock = document.createElement("div");
-            textBlock.classList.add("text");
-
-            const workList = document.createElement("p");
-            workList.classList.add("event");
-            workList.innerHTML = cloudFile[i].event;
-
-            const redactIcon = document.createElement("img");
-            redactIcon.classList.add("redact");
-            redactIcon.setAttribute("src", "/src/img/icons8-редактировать.svg");
-            redactIcon.addEventListener("click", redact);
-
-            textBlock.appendChild(workList);
-            textBlock.appendChild(redactIcon);
-
-            const deleteIcon = document.createElement("img");
-            deleteIcon.classList.add("icon");
-            deleteIcon.setAttribute("src", "/src/img/BlackCross.svg");
-            deleteIcon.addEventListener("click", del);
-
-            card.appendChild(inputFild);
-            card.appendChild(textBlock);
-            card.appendChild(deleteIcon);
-
-            listCards.appendChild(card);
+        reader.readAsText(loadFile);
     }
-    console.log(file)
-})
+});
+
+
 
 let flag = 0;
 document.getElementById("unwrap").addEventListener("click", function(){
