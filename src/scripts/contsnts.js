@@ -1,0 +1,1 @@
+export const URL = "http://localhost:5258/api/Values/";
